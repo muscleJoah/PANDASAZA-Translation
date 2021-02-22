@@ -1,4 +1,4 @@
-package com.pandasaza.transaltion.dto
+package com.pandasaza.transaltion.dto.nmtDTO
 
 data class messageDTO (
 
