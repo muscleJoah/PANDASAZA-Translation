@@ -1,5 +1,5 @@
 package com.pandasaza.transaltion.dto.detectLangDTO
 
-data class parameterDTO (
+data class detectParameterDTO (
     val query : String
         )

@@ -1,6 +1,6 @@
 package com.pandasaza.transaltion.dto.nmtDTO
 
-data class requestDTO(
+data class nmtParameterDTO(
     val source : String,
     val target : String,
     val text : String

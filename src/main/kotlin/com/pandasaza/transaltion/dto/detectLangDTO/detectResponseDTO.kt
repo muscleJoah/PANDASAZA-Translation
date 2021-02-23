@@ -1,5 +1,5 @@
 package com.pandasaza.transaltion.dto.detectLangDTO
 
-data class langcodeDTO (
+data class detectResponseDTO (
     val langCode : String
         )

@@ -1,5 +1,5 @@
 package com.pandasaza.transaltion.dto.nmtDTO
 
-data class translateDTO (
+data class papagoResponseDTO (
     val message : messageDTO
 )

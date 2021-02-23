@@ -1,28 +1,41 @@
 package com.pandasaza.transaltion.service
 
 import com.google.gson.GsonBuilder
-import com.pandasaza.transaltion.dto.nmtDTO.requestDTO
-import com.pandasaza.transaltion.dto.nmtDTO.translateDTO
-import org.springframework.core.ParameterizedTypeReference
-import org.springframework.http.ResponseEntity
+import com.pandasaza.transaltion.dto.nmtDTO.nmtParameterDTO
+import com.pandasaza.transaltion.dto.nmtDTO.papagoResponseDTO
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.reactive.function.BodyInserters
+import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 
 @Service
-class NmtService(private val restTemplate: RestTemplate) {
+class NmtService(private val restTemplate: RestTemplate , private val webClient: WebClient) {
 
     companion object{
         const val apiURL :String = "https://openapi.naver.com/v1/papago/n2mt"
     }
-    fun translate( source : String, target : String , text : String ): ResponseEntity<translateDTO> {
+    /*fun translate( source : String, target : String , text : String ): ResponseEntity<translateDTO> {
         var gson = GsonBuilder().create()
         val request = requestDTO(source,target,text)
         var json = gson.toJson(request)
         return restTemplate.postForEntity("$apiURL" ,json , translateDTO::class.java)
+    }*/
+
+    fun translate(source : String, target :String, text: String): Flux<papagoResponseDTO> {
+        var gson = GsonBuilder().create()
+        val request = nmtParameterDTO(source,target,text)
+        var json = gson.toJson(request)
+
+        return webClient.post()
+            .uri("$apiURL")
+            .body(BodyInserters.fromValue(json))
+            .retrieve()
+            .bodyToFlux(papagoResponseDTO::class.java)
+
+            //.exchangeToFlux{res -> return@exchangeToFlux res.bodyToFlux (papagoResponseDTO::class.java)}
     }
 }
-
-// ParameterizedTypeReference :: Array 형태의 JSON Object 매핑
-inline fun <reified T> typeReference() = object : ParameterizedTypeReference<T>() {}
 
