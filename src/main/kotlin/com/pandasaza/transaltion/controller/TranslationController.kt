@@ -27,12 +27,12 @@ class TranslationController(private val nmtService: NmtService, private val dete
         val temp =  nmtService.translate(source, target, text)!!.message.result.translatedText
         println(temp)
     }
+
     @PostMapping("/detectlang/{lang}")
     fun detectTest(@PathVariable("lang") text: String){
         val temp =  detectLangService.detectLang(text)!!.langCode
         println(temp)
     }
-
 
     @PostMapping("/translateLang/{text}/{target}")
     fun translate(@PathVariable ("text")text : String, @PathVariable("target")target : String){

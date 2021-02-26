@@ -19,17 +19,11 @@ class NmtService(private val restTemplate: RestTemplate , private val webClient:
     companion object{
         const val apiURL :String = "https://openapi.naver.com/v1/papago/n2mt"
     }
-    /*fun translate( source : String, target : String , text : String ): ResponseEntity<translateDTO> {
-        var gson = GsonBuilder().create()
-        val request = requestDTO(source,target,text)
-        var json = gson.toJson(request)
-        return restTemplate.postForEntity("$apiURL" ,json , translateDTO::class.java)
-    }*/
 
     fun translate(source : String, target :String, text: String): papagoResponseDTO? {
-        var gson = GsonBuilder().create()
+        val gson = GsonBuilder().create()
         val request = nmtParameterDTO(source,target,text)
-        var json = gson.toJson(request)
+        val json = gson.toJson(request)
 
         return webClient.post()
             .uri("$apiURL")
@@ -38,10 +32,6 @@ class NmtService(private val restTemplate: RestTemplate , private val webClient:
             .bodyToMono(papagoResponseDTO::class.java)
             .block()
 
-
-
-
-            //.exchangeToFlux{res -> return@exchangeToFlux res.bodyToFlux (papagoResponseDTO::class.java)}
     }
 }
 

@@ -18,18 +18,11 @@ class DetectLangService(private val restTemplate: RestTemplate , private val web
         const val apiURL  = "https://openapi.naver.com/v1/papago/detectLangs"
     }
 
-    /*fun detectLang(text  : String): ResponseEntity<langcodeDTO> {
-        var gson = GsonBuilder().create()
-        val request = parameterDTO(text)
-        var json = gson.toJson(request)
-    return restTemplate.postForEntity("$apiURL", json , langcodeDTO::class.java )
-    }
-*/
 
     fun detectLang(text : String): detectResponseDTO? {
-        var gson = GsonBuilder().create()
+        val gson = GsonBuilder().create()
         val request = detectParameterDTO(text)
-        var json = gson.toJson(request)
+        val json = gson.toJson(request)
         return webClient.post()
             .uri("$apiURL")
             .body(BodyInserters.fromValue(json))
