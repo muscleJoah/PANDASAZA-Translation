@@ -9,6 +9,8 @@ import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.util.stream.Collectors
+import java.util.stream.Stream
 
 
 @Service
@@ -24,7 +26,7 @@ class NmtService(private val restTemplate: RestTemplate , private val webClient:
         return restTemplate.postForEntity("$apiURL" ,json , translateDTO::class.java)
     }*/
 
-    fun translate(source : String, target :String, text: String): Flux<papagoResponseDTO> {
+    fun translate(source : String, target :String, text: String): papagoResponseDTO? {
         var gson = GsonBuilder().create()
         val request = nmtParameterDTO(source,target,text)
         var json = gson.toJson(request)
@@ -33,7 +35,11 @@ class NmtService(private val restTemplate: RestTemplate , private val webClient:
             .uri("$apiURL")
             .body(BodyInserters.fromValue(json))
             .retrieve()
-            .bodyToFlux(papagoResponseDTO::class.java)
+            .bodyToMono(papagoResponseDTO::class.java)
+            .block()
+
+
+
 
             //.exchangeToFlux{res -> return@exchangeToFlux res.bodyToFlux (papagoResponseDTO::class.java)}
     }

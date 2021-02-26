@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.util.stream.Stream
 
 
 @Controller
@@ -22,12 +23,15 @@ class TranslationController(private val nmtService: NmtService, private val dete
         @PathVariable("source") source: String,
         @PathVariable("target") target: String,
         @PathVariable("text") text: String
-    ): Flux<papagoResponseDTO> =
-         nmtService.translate(source, target, text)
-
+    ) {
+        val temp =  nmtService.translate(source, target, text)!!.message.result.translatedText
+        println(temp)
+    }
     @PostMapping("/detectlang/{lang}")
-    fun detectTest(@PathVariable("lang") text: String): Flux<detectResponseDTO> =
-        detectLangService.detectLang(text)
+    fun detectTest(@PathVariable("lang") text: String){
+        val temp =  detectLangService.detectLang(text)!!.langCode
+        println(temp)
+    }
 
 
     @PostMapping("/translateLang/{text}/{target}")

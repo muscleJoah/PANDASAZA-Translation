@@ -9,9 +9,9 @@ import reactor.core.publisher.Flux
 class TranslationService(private val nmtService: NmtService , private val detectLangService: DetectLangService) {
 
     fun translate(target : String , text : String): String {
-
-        val source : Flux<String> = detectLangService.detectLang(text).map{it.langCode}
-        println("$source")
-        return ""
+        val langCode = detectLangService.detectLang(text)!!.langCode
+        val translatedText = nmtService.translate(langCode, target, text)!!.message.result.translatedText
+        println(translatedText)
+        return translatedText
     }
 }

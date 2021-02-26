@@ -26,7 +26,7 @@ class DetectLangService(private val restTemplate: RestTemplate , private val web
     }
 */
 
-    fun detectLang(text : String): Flux<detectResponseDTO> {
+    fun detectLang(text : String): detectResponseDTO? {
         var gson = GsonBuilder().create()
         val request = detectParameterDTO(text)
         var json = gson.toJson(request)
@@ -34,6 +34,7 @@ class DetectLangService(private val restTemplate: RestTemplate , private val web
             .uri("$apiURL")
             .body(BodyInserters.fromValue(json))
             .retrieve()
-            .bodyToFlux(detectResponseDTO::class.java)
+            .bodyToMono(detectResponseDTO::class.java)
+            .block()
     }
 }
